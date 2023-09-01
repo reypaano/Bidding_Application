@@ -4,6 +4,8 @@ import userRoutes from "./routes/users"
 import session from "express-session"
 import env from "./util/validateEnv"
 import MongoStore from "connect-mongo"
+import { requiresAuth } from "./middleware/auth"
+import itemRoutes from "./routes/items"
 
 const app = express()
 
@@ -26,6 +28,7 @@ app.use(session({
 }))
 
 app.use("/api/users", userRoutes)
+app.use("/api/items",requiresAuth, itemRoutes)
 
 //error Handler
 //if no route is found:
