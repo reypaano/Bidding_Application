@@ -1,24 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import NavBar from './components/NavBar/NavBar';
+import { User } from './models/user';
+import * as BiddingApi from "./network/bidding_app_api"
+import { Container } from 'react-bootstrap';
+import SignUpPage from './components/Auth/SigUpPage';
+import LoginPage from './components/Auth/LoginPage';
+import LoggedInLanding from './components/LoggedInLanding';
+import LoggedOutLanding from './components/LoggedOutLanding';
 
 function App() {
+
+  const [loggedInUSer, setLoggedInUser] = useState<User | null>(null)
+
+  const [showSignUpModal, setShowSignUpModal]= useState(false)
+  const [showLoginModal, setShowLoginModal]= useState(false)
+
+  //try to load the user upon render
+  useEffect(() => {
+    async function fetchLoggedInUser() {
+      try {
+        const user = await BiddingApi.getLoggedInUser()
+        setLoggedInUser(user)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchLoggedInUser()
+  }, []) // empty array to execute 1 time only
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hi hello!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <NavBar 
+        loggedInUSer={loggedInUSer}
+        onLoginClicked={() => setShowLoginModal(true)}
+        onSignUpClicked={() => setShowSignUpModal(true)}
+        onLogoutSuccessfull={() => setLoggedInUser(null)}
+      />
+      <Container>
+        <>
+          { loggedInUSer ? <LoggedInLanding/> : <LoggedOutLanding/> }
+        </>
+      </Container>
+
+        { showSignUpModal && 
+        <SignUpPage
+          onDismiss={() => setShowSignUpModal(false)}
+          onSignUpSuccessful={ (user) => {
+            setLoggedInUser(user)
+            setShowSignUpModal(false)
+          }}
+        />
+        }
+        {
+          showLoginModal && 
+        <LoginPage 
+          onDismiss={() => setShowLoginModal(false)}
+          onLoginSuccessful= {(user) => {
+            setLoggedInUser(user)
+            setShowLoginModal(false)
+          }}
+        
+        />
+        }
+      
     </div>
   );
 }
