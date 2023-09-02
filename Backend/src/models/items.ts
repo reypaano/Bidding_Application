@@ -5,7 +5,7 @@ const itemSchema = new Schema({
     currentPrcie: {type: Number, required: true },
     duration: {type: String, required: true },
     status: { type: String, required: true},
-    createdBy:{ type: String, required: true}
+    createdBy:{ type: Schema.Types.ObjectId, required: true}
 })
 
 
