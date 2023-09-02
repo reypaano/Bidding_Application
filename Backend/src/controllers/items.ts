@@ -58,7 +58,7 @@ export const getItem: RequestHandler = async (req, res, next) => {
 
 interface CreateItemBody{
     itemName?: string,
-    currentPrcie?: number,
+    currentPrice?: number,
     duration?: string,
     status?: string,
     createdBy?: string
@@ -66,21 +66,21 @@ interface CreateItemBody{
 
 export const createItem: RequestHandler<unknown, unknown, CreateItemBody,unknown> = async (req, res, next) => {
   const itemName = req.body.itemName  
-  const currentPrcie = req.body.currentPrcie  
+  const currentPrice = req.body.currentPrice  
   const duration = req.body.duration  
   const status = req.body.status  
   const authenticatedUserId = req.session.userId
 
-  try {
+  try { console.log(req.body)
     assertIsDefined(authenticatedUserId)
 
-    if (!itemName || !currentPrcie || !duration || !status) {
+    if (!itemName || !currentPrice || !duration || !status) {
         throw createHttpError(400, "Missing Parameters");
     }
 
     const newItem = await ItemModel.create({
         itemName: itemName,
-        currentPrcie: currentPrcie,
+        currentPrice: currentPrice,
         duration: duration,
         status: status,
         createdBy:authenticatedUserId
@@ -100,7 +100,7 @@ interface UpdateItemParams {
 
 interface UpdateItemBody{
   itemName?: string,
-  currentPrcie?: number,
+  currentPrice?: number,
   duration: string
   status?: string,
 }
@@ -108,7 +108,7 @@ interface UpdateItemBody{
 export const updateItem: RequestHandler<UpdateItemParams, unknown, UpdateItemBody, unknown> = async(req, res, next) => {
   const itemId = req.params.itemId
   const newItemName = req.body.itemName
-  const newCurrentPrice = req.body.currentPrcie
+  const newCurrentPrice = req.body.currentPrice
   const newStatus = req.body.status
   const authenticatedUserId = req.session.userId  
 
@@ -136,7 +136,7 @@ export const updateItem: RequestHandler<UpdateItemParams, unknown, UpdateItemBod
       throw createHttpError(401, "You cannot edit this item!")
 
     item.itemName = newItemName
-    item.currentPrcie = newCurrentPrice
+    item.currentPrice = newCurrentPrice
     item.status = newStatus
 
     const updatedItem = await item.save()

@@ -1,3 +1,4 @@
+import { Item } from "../models/item"
 import { User } from "../models/user"
 
 
@@ -60,4 +61,26 @@ export async function login (credentials: LoginCredentials): Promise<User> {
 //logout
 export async function logout() {
     await fetchData("/api/users/logout", { method: "POST"})
+}
+
+
+export interface ItemInput {
+    _id: string,
+    itemName: string,
+    currentPrice: number,
+    duration: string,
+    status: string
+}
+
+
+export async function createItem (item: ItemInput): Promise<Item> {
+    const response = await fetchData("/api/items",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(item)
+    })
+    return response.json()
 }
