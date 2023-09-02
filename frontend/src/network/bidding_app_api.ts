@@ -15,7 +15,7 @@ async function fetchData(input:RequestInfo, init?: RequestInit) {
 }
 
 export async function getLoggedInUser(): Promise<User> {
-    const response = await fetchData("/api/user", { method: "GET"})
+    const response = await fetchData("/api/users", { method: "GET"})
     return response.json()
 }
 
@@ -23,7 +23,8 @@ export async function getLoggedInUser(): Promise<User> {
 export interface SignupCredentials {
     username: string,
     email: string,
-    password: string
+    password: string,
+    wallet: number
 }
 
 export async function signUp (credentials: SignupCredentials): Promise<User> {
@@ -42,7 +43,8 @@ export async function signUp (credentials: SignupCredentials): Promise<User> {
 //login Credentials
 export interface LoginCredentials {
     username: string,
-    password: string
+    password: string,
+    wallet: number
 }
 
 export async function login (credentials: LoginCredentials): Promise<User> {
@@ -82,5 +84,18 @@ export async function createItem (item: ItemInput): Promise<Item> {
         },
         body: JSON.stringify(item)
     })
+    return response.json()
+}
+
+export async function updateUser(userId:string, user: SignupCredentials): Promise<User> { console.log(userId)
+    const response = await fetchData("/api/users/" + userId, 
+    {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user)
+    })
+
     return response.json()
 }

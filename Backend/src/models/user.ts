@@ -4,6 +4,7 @@ const userSchema  = new Schema({
     username: { type: String, required: true, unique: true},
     email: { type: String, required: true, select: false, unique: true},
     password: { type: String, required: true, select: false},
+    wallet: {type: Number}
 })
 
 type User = InferSchemaType<typeof userSchema>

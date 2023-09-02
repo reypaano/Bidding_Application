@@ -11,6 +11,9 @@ router.post("/login", UserController.login)
 
 router.post("/logout", UserController.logout)
 
+router.patch("/:userId", UserController.updateWallet)
+
+
 
 
 export default router

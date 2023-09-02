@@ -22,7 +22,7 @@ const CreateNewItemModal = ({itemToEdit, onDismiss, onItemSaved}: CreateNewItemM
         }
     })
     async function onSubmit(input:ItemInput) {
-        try { console.log(input)
+        try { 
             let itemResponse: Item
 
             if(itemToEdit)

@@ -2,6 +2,8 @@ import { RequestHandler } from "express"
 import createHttpError from "http-errors"
 import UserModel from "../models/user"
 import bcrypt from "bcrypt"
+import { assertIsDefined } from "../util/assertisDefined"
+import mongoose from "mongoose"
 
 export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
     const authenticatedUserId = req.session.userId
@@ -20,7 +22,8 @@ export const getAuthenticatedUser: RequestHandler = async (req, res, next) => {
 interface SignUpBody{
     username?: string,
     email?: string,
-    password?: string
+    password?: string,
+    wallet?: number
 }
 
 export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = async ( req, res, next) =>{
@@ -29,7 +32,6 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
     const passwordRaw = req.body.password
    
     try {
-        console.log(req.body)
         if(!username || !email || !passwordRaw){
             throw createHttpError(400, "parametersss Missing!")
         }
@@ -47,6 +49,7 @@ export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = asy
             username: username,
             email: email,
             password: passwordHashed,
+            wallet: 0
         })
 
         req.session.userId = newUser._id
@@ -97,3 +100,48 @@ export const logout: RequestHandler = (req, res, next) => {
             res.sendStatus(200)
     })
 }
+
+interface UpdateUserParams {
+    userId: string
+  }
+  
+  interface UpdateUserBody{
+    wallet?: number,
+  }
+  
+  export const updateWallet: RequestHandler<UpdateUserParams, unknown, UpdateUserBody, unknown> = async(req, res, next) => {
+    const userId = req.session.userId
+    const newWallet = req.body.wallet
+    const authenticatedUserId = req.session.userId  
+
+
+    try {
+      assertIsDefined(authenticatedUserId)
+  
+      if(!mongoose.isValidObjectId(userId))
+        throw createHttpError(400, "Invalid user ID.")
+  
+      if (!newWallet) 
+        throw createHttpError(400, "User must have wallet credits.");
+      
+      
+      const user = await UserModel.findById(userId).exec()
+  
+      if(!user)
+        throw createHttpError(404, "User not found")
+      
+      if ( !user._id.equals(authenticatedUserId))
+        throw createHttpError(401, "You Add wallet credits to this Account!")
+    
+        if( user.wallet !== undefined)
+        user.wallet = +user?.wallet + +newWallet
+  
+      const updatedUser = await user.save()
+  
+      res.status(200).json(updatedUser)
+    } catch (error) {
+        next(error)
+      
+    }
+  
+  }
