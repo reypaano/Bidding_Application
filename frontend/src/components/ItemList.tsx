@@ -1,5 +1,6 @@
 import styles from "../styles/utils.module.css"
 import { Item } from "../models/item"
+import Timer from "./Timer"
 
 interface ItemListProps {
     list: Item[],
@@ -9,26 +10,29 @@ interface ItemListProps {
 const ItemList = (props: ItemListProps) => {
 
     const {list, onBid} = props
-    console.log(list)
-
+    
     return (
         <>
          <div>
-            <table>
+            <table >
                 <tr>
-                    <th>Company</th>
-                    <th>Contact</th>
-                    <th>Country</th>
+                    <th>Item Name</th>
+                    <th>Current Price</th>
+                    <th>Duration</th>
                     <th>Action</th>
                 </tr>
                 { 
-                    list.map((item) => {
-                        console.log(item)
+                    list?.map((item) => {
                         return (
                             <tr key={item._id}>
                                 <td>{`${item.itemName}`}</td>
                                 <td>{`${item.currentPrice}`}</td>
-                                <td>{`${item.duration}`}</td>
+                                <td>{item.status === "completed"? "ENDED" :<Timer 
+                                        countdownDuration={parseInt(item.duration)} 
+                                        createdDate={item.createdAt}
+                                        item = {item}
+                                    />}
+                                </td>
                                 <td> 
                                     <div> <input type="button" value="Bid" onClick={()=>onBid(item)}/></div>
                                 </td>

@@ -5,7 +5,8 @@ const itemSchema = new Schema({
     currentPrice: {type: Number, required: true },
     duration: {type: String, required: true },
     status: { type: String, required: true},
-    createdBy:{ type: Schema.Types.ObjectId, required: true}
+    createdBy:{ type: Schema.Types.ObjectId, required: true},
+    createdAt:{ type: Date, required: true}
 })
 
 

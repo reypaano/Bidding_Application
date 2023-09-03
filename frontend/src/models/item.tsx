@@ -3,5 +3,6 @@ export interface Item {
     itemName: string,
     currentPrice: number,
     duration: string,
-    status: string
+    status: string,
+    createdAt: Date
 }

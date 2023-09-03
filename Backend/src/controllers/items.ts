@@ -2,7 +2,7 @@ import { RequestHandler } from "express"
 import createHttpError from "http-errors"
 import { assertIsDefined } from "../util/assertisDefined"
 import ItemModel from "../models/items"
-import mongoose from "mongoose"
+import mongoose, { now } from "mongoose"
 
 
 
@@ -83,7 +83,8 @@ export const createItem: RequestHandler<unknown, unknown, CreateItemBody,unknown
         currentPrice: currentPrice,
         duration: duration,
         status: status,
-        createdBy:authenticatedUserId
+        createdBy:authenticatedUserId,
+        createdAt: now()
     })
     res.status(201).json(newItem)
 
@@ -181,6 +182,43 @@ export const updatePriceItem: RequestHandler<UpdatePriceParams, unknown, unknown
     
       if( item.currentPrice !== undefined)
         item.currentPrice = +item?.currentPrice + +addtionalBid
+
+    const updatedUser = await item.save()
+
+    res.status(200).json(updatedUser)
+  } catch (error) {
+      next(error)
+    
+  }
+
+}
+
+interface CloseItemParams {
+  itemId: string
+}
+
+// interface CloseItemBody{
+//   currentPrice?: number,
+// }
+
+export const closeItem: RequestHandler<CloseItemParams, unknown, unknown, unknown> = async(req, res, next) => {
+  const itemId = req.params.itemId
+  // const newWallet = req.body.wallet
+  const authenticatedUserId = req.session.userId  
+
+  try {
+    assertIsDefined(authenticatedUserId)
+
+    if(!mongoose.isValidObjectId(itemId))
+      throw createHttpError(400, "Invalid user ID.")
+    
+    const item = await ItemModel.findById(itemId).exec()
+
+    if(!item)
+      throw createHttpError(404, "Item not found")
+    
+      if( item.status !== undefined)
+        item.status = "completed"
 
     const updatedUser = await item.save()
 

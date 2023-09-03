@@ -9,6 +9,7 @@ router.get("/:itemId", ItemController.getItem)
 router.post("/", ItemController.createItem)
 router.patch("/:itemId", ItemController.updateItem)
 router.patch("/bid/:itemId", ItemController.updatePriceItem)
+router.patch("/closeItem/:itemId", ItemController.closeItem)
 
 
 

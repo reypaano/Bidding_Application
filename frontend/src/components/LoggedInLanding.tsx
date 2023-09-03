@@ -4,13 +4,16 @@ import { Item } from "../models/item"
 import * as BiddingApi from "../network/bidding_app_api"
 import styles from "../styles/utils.module.css"
 import ItemList from "./ItemList"
+import Timer from "./Timer"
 
 const LoggedInLanding = () => {
 
     const [user, setUser] = useState<User | null>(null)
-    const [showAddItemModal, setShowAddItemModal] = useState(true)
+    const [showItemtable, setShowItemtable] = useState(true)
     const [itemList, setItemList] = useState<Item[]>()
+    const [filteredItems, setFilteredItems] = useState<Item[]>([]);
     const [itemToBid, setItemToBid] = useState(null as null | Item)
+    const [statusFilter, setStatusFilter] = useState<string>('')
 
     useEffect(() => {
         async function fetchLoggedInUser() {
@@ -29,7 +32,8 @@ const LoggedInLanding = () => {
           try {
             const items = await BiddingApi.fetchItems()
             setItemList(items)
-            console.log(items)
+            setFilteredItems(items)
+            setShowItemtable(true)
           } catch (error) {
               console.error(error)
           }
@@ -50,18 +54,28 @@ const LoggedInLanding = () => {
       updateItem()
 }, [itemToBid]);
 
+useEffect(() => {
+  const filtered = itemList?.filter((item) =>
+      item.status.toLowerCase().includes(statusFilter.toLowerCase())
+    );
+    setFilteredItems(filtered)
+}, [statusFilter]);
+
   const bidItemData = (data: Item)=>{
     setItemToBid(data)
   }
 
-
     return (
        <>
         <section className=".section-content">
-          <input type="button" value="Ongoing"/>
-          <input type="button" value="Completed"/>
-          <ItemList list={itemList} onBid={bidItemData}/>
+          <input type="button" value="Ongoing" onClick={() => setStatusFilter("ongoing")}/>
+          <input type="button" value="Completed" onClick={() => setStatusFilter("completed")}/>
+          {
+            showItemtable &&
+            <ItemList list={filteredItems} onBid={bidItemData}/>
+          }
         </section>
+        {/* <Timer /> */}
        </>
         
         

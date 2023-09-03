@@ -103,6 +103,18 @@ export async function updateItem(itemId:string): Promise<Item>{ console.log(item
     return response.json()
 }
 
+
+export async function closeItem(itemId:string): Promise<Item>{ console.log(itemId)
+    const response = await fetchData("/api/items/closeItem/"+ itemId,
+    {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        // body: JSON.stringify(user)
+    })
+    return response.json()
+}
 export async function updateUser(userId:string, user: SignupCredentials): Promise<User> { 
     const response = await fetchData("/api/users/" + userId, 
     {
