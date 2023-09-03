@@ -21,14 +21,12 @@ const DepositModal = ({ userToEdit, onDismiss}: DepositModalProps) =>{
     async function onSubmit(input:SignupCredentials) {
         try { 
             let userResponse: User
-            let name1: string = userToEdit?._id ?? ""
+            let userId: string = userToEdit?._id ?? ""
 
             if( userToEdit !== undefined)
-             userResponse = await BiddingApi.updateUser(name1, input)
+             userResponse = await BiddingApi.updateUser(userId, input)
                 // onUserSaved(userResponse)
 
-            
-            
         } catch (error) {
             alert(error)
             console.error(error)

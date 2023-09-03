@@ -16,7 +16,7 @@ const CreateNewItemModal = ({itemToEdit, onDismiss, onItemSaved}: CreateNewItemM
     const {register, handleSubmit, formState:{errors, isSubmitting}} = useForm<ItemInput> ({
         defaultValues: {
             itemName: itemToEdit?.itemName || "",
-            currentPrice: itemToEdit?.currentPrcie || 0,
+            currentPrice: itemToEdit?.currentPrice || 0,
             duration: itemToEdit?.duration || "",
             status: itemToEdit?.status || "ongoing"
         }

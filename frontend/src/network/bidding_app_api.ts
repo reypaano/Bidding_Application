@@ -86,8 +86,24 @@ export async function createItem (item: ItemInput): Promise<Item> {
     })
     return response.json()
 }
+export async function fetchItems(): Promise<Item[]>{
+    const response = await fetchData("api/items/", { method: "GET"})
+    return response.json()
+}
 
-export async function updateUser(userId:string, user: SignupCredentials): Promise<User> { console.log(userId)
+export async function updateItem(itemId:string): Promise<Item>{ console.log(itemId)
+    const response = await fetchData("/api/items/bid/"+ itemId,
+    {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        // body: JSON.stringify(user)
+    })
+    return response.json()
+}
+
+export async function updateUser(userId:string, user: SignupCredentials): Promise<User> { 
     const response = await fetchData("/api/users/" + userId, 
     {
         method: "PATCH",

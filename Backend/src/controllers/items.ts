@@ -148,3 +148,46 @@ export const updateItem: RequestHandler<UpdateItemParams, unknown, UpdateItemBod
   }
 
 }
+
+
+interface UpdatePriceParams {
+  itemId: string
+}
+
+// interface UpdatePriceBody{
+//   currentPrice?: number,
+// }
+
+export const updatePriceItem: RequestHandler<UpdatePriceParams, unknown, unknown, unknown> = async(req, res, next) => {
+  const itemId = req.params.itemId
+  // const newWallet = req.body.wallet
+  const authenticatedUserId = req.session.userId  
+  const addtionalBid = 5
+
+  try {
+    assertIsDefined(authenticatedUserId)
+
+    if(!mongoose.isValidObjectId(itemId))
+      throw createHttpError(400, "Invalid user ID.")
+
+    // if (!newWallet) 
+    //   throw createHttpError(400, "User must have wallet credits.");
+    
+    
+    const item = await ItemModel.findById(itemId).exec()
+
+    if(!item)
+      throw createHttpError(404, "Item not found")
+    
+      if( item.currentPrice !== undefined)
+        item.currentPrice = +item?.currentPrice + +addtionalBid
+
+    const updatedUser = await item.save()
+
+    res.status(200).json(updatedUser)
+  } catch (error) {
+      next(error)
+    
+  }
+
+}
