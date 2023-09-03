@@ -34,7 +34,7 @@ const ItemList = (props: ItemListProps) => {
                                     />}
                                 </td>
                                 <td> 
-                                    <div> <input type="button" value="Bid" onClick={()=>onBid(item)}/></div>
+                                    <div> <input type="button" value="Bid" onClick={()=>onBid(item)} disabled={item.status.trim() === 'completed'}/></div>
                                 </td>
                             </tr>
                         )
