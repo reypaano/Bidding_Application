@@ -35,7 +35,6 @@ function Timer({ countdownDuration, createdDate, item }: CountdownProps) {
     if (timerActive && totalSeconds > 0) {
       const interval = setInterval(() => {
         setTotalSeconds((prevSeconds) => {
-          console.log(prevSeconds);
           if (prevSeconds > 1) {
             setTimeRemaining(formatTimeRemaining(prevSeconds - 1));
             return prevSeconds - 1;
@@ -68,11 +67,7 @@ function Timer({ countdownDuration, createdDate, item }: CountdownProps) {
     await BiddingApi.closeItem(item._id);
   };
 
-  return (
-    <div className="countdown">
-      <h2>{timeRemaining}</h2>
-    </div>
-  );
+  return <div className="countdown">{timeRemaining}</div>;
 }
 
 export default Timer;
