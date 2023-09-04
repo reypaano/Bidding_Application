@@ -32,7 +32,7 @@ function App() {
   }, []); // empty array to execute 1 time only
 
   return (
-    <div>
+    <div className="App">
       <NavBar
         loggedInUSer={loggedInUSer}
         onLoginClicked={() => setShowLoginModal(true)}
