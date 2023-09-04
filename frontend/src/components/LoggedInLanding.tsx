@@ -101,7 +101,9 @@ const LoggedInLanding = () => {
           onClick={() => setShowCreateNewItemModal(true)}
           className={`${styles.createItemBtn}`}
         />
-        {showItemtable && <ItemList list={filteredItems} onBid={bidItemData} />}
+        {showItemtable && user != null && (
+          <ItemList list={filteredItems} onBid={bidItemData} user={user} />
+        )}
         {showCreateNewItemModal && (
           <CreateNewItemModal
             onDismiss={() => setShowCreateNewItemModal(false)}
