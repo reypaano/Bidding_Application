@@ -1,7 +1,5 @@
 const LoggedOutLanding = () => {
-    return (
-        <p> Please Login!!!</p>
-    )
-}
+  return <p> Please Login!!!</p>;
+};
 
-export default LoggedOutLanding
+export default LoggedOutLanding;

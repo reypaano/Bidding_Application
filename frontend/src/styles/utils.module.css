@@ -78,3 +78,9 @@ tr:nth-child(even) {
 .navName {
   margin-right: 15px;
 }
+
+.loggedOutPageBtn {
+  margin-right: 15px;
+  background-color: transparent;
+  padding: 8px 25px;
+}

@@ -1,18 +1,31 @@
-import { Button } from "react-bootstrap"
+import { Button } from "react-bootstrap";
+import styles from "../../styles/utils.module.css";
 
 interface NavBarLoggedOutProps {
-    onSignUpClicked: () =>void
-    onLoginClicked: () =>void
+  onSignUpClicked: () => void;
+  onLoginClicked: () => void;
 }
 
-const NavBarLoggedOut = ({onSignUpClicked, onLoginClicked}: NavBarLoggedOutProps) => {
+const NavBarLoggedOut = ({
+  onSignUpClicked,
+  onLoginClicked,
+}: NavBarLoggedOutProps) => {
+  return (
+    <>
+      <input
+        className={`${styles.loggedOutPageBtn}`}
+        type="button"
+        value="Sign Up"
+        onClick={onSignUpClicked}
+      />
+      <input
+        className={`${styles.loggedOutPageBtn}`}
+        type="button"
+        value="Login"
+        onClick={onLoginClicked}
+      />
+    </>
+  );
+};
 
-    return(
-       <>
-       <Button onClick={onSignUpClicked}>Sign Up</Button>
-       <Button onClick={onLoginClicked}>Login</Button>
-       </> 
-    )
-}
-
-export default NavBarLoggedOut
+export default NavBarLoggedOut;
