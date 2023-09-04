@@ -1,5 +1,7 @@
+import { Header } from "./Header";
+
 const LoggedOutLanding = () => {
-  return <p> Please Login!!!</p>;
+  return <Header />;
 };
 
 export default LoggedOutLanding;
